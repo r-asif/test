@@ -1,0 +1,120 @@
+manufacturer: Fortinet
+type: Firewall
+product: FortiGate
+notes: Tags Fortinet NGFW Fortigate products including VMs and SSL VPNs.
+tags:
+  - wana_feb_21
+
+selectors:
+
+  - data_type: HttpServer
+    field: httpBody
+    notes: Based on CRE's 'HttpBody includes '%.location="\/login"%'' fingerprint in
+      October 2019
+    regex_to_match: 'top\.location\=.\/remote\/login'
+
+  - data_type: HttpServer
+    field: httpBody
+    notes: Based on CRE's 'HttpBody includes  '%ftnt-fortinet-grid%'' fingerprint in
+      October 2019
+    regex_to_match: '\<f\-icon class\=.ftnt-fortinet-grid icon-xl.\>\<\/f\-icon\>'
+
+  - data_type: HttpServer
+    field: httpHeaders
+    notes: Based on CRE's fingerprint in October 2019
+    regex_to_match: '(?i)(?:^Set-Cookie:).*?(?:svpncookie)'
+
+  - data_type: HttpServer
+    field: httpHeaders
+    notes: Based on CRE's fingerprint in October 2019
+    regex_to_match: '(?i)(?:^Set-Cookie:).*?(?:vdom\[.\])'
+
+  - data_type: HttpServer
+    field: httpHeaders
+    notes: Based on CRE's fingerprint in October 2019
+    regex_to_match: '(?i)(?:^Set-Cookie:).*?(?:file\[.\]downloading\[.\].*=.0\[.*\]260)'
+
+  - data_type: HttpServer
+    field: httpHeaders
+    notes: Based on CRE's fingerprint in October 2019
+    regex_to_match: '(?i)(?:^Set-Cookie:).*?(?:file\[.\]downloading\[.\])'
+
+  - data_type: HttpServer
+    field: httpHeaders
+    regex_to_match: '(?i)WWW\-Authenticate\: Fortigate.*'
+    exemplars:
+      - context: 'WWW-Authenticate: Fortigate'
+        match: 'WWW-Authenticate: Fortigate'
+
+  - data_type: HttpServer
+    field: httpHeaders
+    regex_to_match: '(?i)www\-authenticate\: Basic realm\=.*FortiGate.*'
+    exemplars:
+      - context: 'www-authenticate: Basic realm="Firewall: FortiGate"'
+        match: 'www-authenticate: Basic realm="Firewall: FortiGate"'
+
+  - data_type: SnmpServer
+    field: response.v1.responseMessage.varbindValue
+    regex_to_match: '(?i).*Fortigate.*'
+    exemplars:
+      - context:  'Fortigate 60F'
+        match: 'Fortigate 60F'
+    metadata:
+      - name: model_number
+        regex: '([\d]{2,3}[A-Za-z])'
+
+  - data_type: SnmpServer
+    field: response.v2.responseMessage.varbindValue
+    regex_to_match: '(?i).*Fortigate.*'
+    exemplars:
+      - context:  'Fortigate 60F'
+        match: 'Fortigate 60F'
+    metadata:
+      - name: model_number
+        regex: '([\d]{2,3}[A-Za-z])'
+
+  - data_type: SnmpServer
+    field: response.v1.responseMessage.varbindValue
+    regex_to_match: '(?i).*Fortiwifi.*'
+    exemplars:
+      - context:  'Fortiwifi-30D-LaFontaine'
+        match: 'Fortiwifi-30D-LaFontaine'
+    metadata:
+      - name: model_number
+        regex: '([\d]{2,3}[A-Za-z])'
+
+  - data_type: SnmpServer
+    field: response.v2.responseMessage.varbindValue
+    regex_to_match: '(?i).*Fortiwifi.*'
+    exemplars:
+      - context:  'Fortiwifi-30D-LaFontaine'
+        match: 'Fortiwifi-30D-LaFontaine'
+    metadata:
+      - name: model_number
+        regex: '([\d]{2,3}[A-Za-z])'
+
+  - data_type: PptpServer
+    field: vendorName
+    regex_to_match: '(?i)Fortinet pptp'
+    exemplars:
+      - context: 'Fortinet pptp'
+        match: 'Fortinet pptp'
+
+  - data_type: Certificate
+    field: tbsCertificate.subject.fullName
+    notes: Matt Kraning via experience and introspection of recent self-signed certificates on 2018-06-29
+    regex_to_match: 'O=Fortinet Ltd\.,CN=FGVM.+'
+
+  - data_type: Certificate
+    exemplars: null
+    field: tbsCertificate.subject.fullName
+    regex_to_match: 'O\=Fortinet.*CN\=[FGT]{2,3}[\d][\w]+'
+    metadata:
+      - name: model
+        regex: '(?i)CN=([FGT]{2,3}1000D)'
+      - name: model
+        regex: '(?i)CN=([FGT]{2,3}100D)'
+      - name: model
+        regex: '(?i)CN=([FGT]{2,3}100E)'
+      - name: model
+        regex: '(?i)CN=([FGT]{2,3}101E)'
